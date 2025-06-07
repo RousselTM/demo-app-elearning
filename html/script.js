@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const rand = Math.random();
         if (rand < 0.6) { // 3 chances sur 5 (0.6)
-            window.open('https://nonexistante.rousseltm.fr', '_blank');
+            window.open('https://nonexistante.fr', '_blank');
         } else {
             if (formationsData.length > 0) {
                 const randomIndex = Math.floor(Math.random() * formationsData.length);
