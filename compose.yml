@@ -2,7 +2,7 @@ services:
   nginx:
     image: nginx
     ports:
-      - "80:80"
+      - "1300:80"
     environment:
       - name=value
       - DT_RELEASE_VERSION=$VERSION
