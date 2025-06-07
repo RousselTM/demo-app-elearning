@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelBtn = document.getElementById('cancel-btn');
 
     const youtubeVideoIds = ["x7qLYzFIy_E", "iR1CWOG20YQ", "HR3HfYHOuHY", "_xvbJdnFQpk", "VfNfFQJ6kvQ"];
-    let formationsData = []; // Pour stocker les données des formations globalement
+    let formationsData = []; // To store formations data globally
 
-    // --- Gestion de la session utilisateur ---
+    // --- User Session Management ---
     let userName = localStorage.getItem('userName') || 'Anonyme';
     let userEmail = localStorage.getItem('userEmail') || 'N/A';
 
@@ -32,20 +32,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const showModal = (modalElement) => {
-        modalElement.style.display = 'flex'; // Utilise flex pour le centrage
+        modalElement.style.display = 'flex'; // Use flex for centering
     };
 
     const hideModal = (modalElement) => {
         modalElement.style.display = 'none';
     };
 
-    // Afficher la modale de connexion au chargement initial
-    if (userName === 'Anonyme') {
-        showModal(loginModal);
-    }
+    // Update user info on page load (for all pages using this script)
     updateUserInfo();
 
-    // Gestion de la soumission du formulaire de connexion
+    // Handle login form submission
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
         userName = document.getElementById('name').value.trim();
@@ -60,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hideModal(loginModal);
     });
 
-    // Bouton Annuler de la modale de connexion
+    // Cancel button for login modal
     cancelBtn.addEventListener('click', () => {
         userName = 'Anonyme';
         userEmail = 'N/A';
@@ -70,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hideModal(loginModal);
     });
 
-    // Bouton Connexion (affichage de la modale)
+    // Login button (shows login modal)
     loginBtn.addEventListener('click', (e) => {
         e.preventDefault();
         document.getElementById('name').value = userName === 'Anonyme' ? '' : userName;
@@ -78,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showModal(loginModal);
     });
 
-    // Bouton Déconnexion
+    // Logout button
     logoutBtn.addEventListener('click', (e) => {
         e.preventDefault();
         userName = 'Anonyme';
@@ -86,11 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('userName', userName);
         localStorage.setItem('userEmail', userEmail);
         updateUserInfo();
-        // Optionnel : Réafficher la modale de connexion après déconnexion
-        showModal(loginModal);
+        showModal(loginModal); // Optionnal: Re-show login modal after logout
     });
 
-    // Clic sur le nom d'utilisateur pour afficher les détails
+    // Click on username to show user details
     userInfoDiv.addEventListener('click', () => {
         if (userName !== 'Anonyme') {
             modalUserName.textContent = userName;
@@ -99,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Fermeture des modales
+    // Close modals
     document.querySelectorAll('.close-button').forEach(button => {
         button.addEventListener('click', () => {
             hideModal(loginModal);
@@ -107,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Fermer la modale si l'utilisateur clique en dehors du contenu
+    // Close modal if user clicks outside of content
     window.addEventListener('click', (event) => {
         if (event.target == loginModal) {
             hideModal(loginModal);
@@ -117,61 +113,83 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Chargement et affichage des formations ---
-    const loadFormations = async () => {
-        try {
-            const response = await fetch('https://raw.githubusercontent.com/RousselTM/grafana-formation/main/tp/data/projet3.json');
-            formationsData = await response.json();
-            
-            formationsGrid.innerHTML = ''; // Nettoyer la grille avant d'ajouter
-            formationsData.forEach(formation => {
-                const card = document.createElement('div');
-                card.classList.add('formation-card');
+    // --- Load and Display Formations (on index.html only) ---
+    // Check if formationsGrid exists, meaning we are on index.html
+    if (formationsGrid) {
+        const loadFormations = async () => {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/RousselTM/grafana-formation/main/tp/data/projet3.json');
+                formationsData = await response.json();
 
-                const link = `https://elearning.rousseltm.fr/training_chapter?id=${formation.id}`;
-                
-                card.innerHTML = `
-                    <a href="${link}" target="_blank">
-                        <img src="${formation.image}" alt="${formation.title}" class="icon">
-                        <h3>${formation.title}</h3>
-                    </a>
-                    <p class="category">Catégorie: ${formation.category}</p>
-                    <p class="views">Vues: ${formation.views}</p>
-                    <a href="${link}" target="_blank" class="view-link">Voir la formation</a>
-                `;
-                formationsGrid.appendChild(card);
-            });
-        } catch (error) {
-            console.error('Erreur lors du chargement des formations:', error);
-            formationsGrid.innerHTML = '<p>Impossible de charger les formations pour le moment. Veuillez réessayer plus tard.</p>';
-        }
-    };
+                formationsGrid.innerHTML = ''; // Clear grid before adding
+                formationsData.forEach(formation => {
+                    const card = document.createElement('div');
+                    card.classList.add('formation-card');
 
-    // --- Section Vidéo à la une ---
+                    // Link to formation_details.php
+                    const detailLink = `formation_details.php?id=${formation.id}`;
+
+                    card.innerHTML = `
+                        <a href="${detailLink}">
+                            <img src="${formation.image}" alt="${formation.title}" class="icon">
+                            <h3>${formation.title}</h3>
+                        </a>
+                        <p class="category">Catégorie: ${formation.category}</p>
+                        <p class="views">Vues: ${formation.views}</p>
+                        <a href="${detailLink}" class="view-link">Voir la formation</a>
+                    `;
+                    formationsGrid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Erreur lors du chargement des formations:', error);
+                formationsGrid.innerHTML = '<p>Impossible de charger les formations pour le moment. Veuillez réessayer plus tard.</p>';
+            }
+        };
+        loadFormations();
+    }
+
+
+    // --- Featured Video Section ---
     const playRandomVideo = () => {
         const randomIndex = Math.floor(Math.random() * youtubeVideoIds.length);
         const videoId = youtubeVideoIds[randomIndex];
-        featuredVideoIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&allow="autoplay"&mute=1&controls=1&showinfo=0&rel=0&iv_load_policy=3`;
+        // Ensure autoplay and other parameters are set correctly
+        featuredVideoIframe.src = `http://www.youtube.com/embed/${videoId}?autoplay=1&allow="autoplay"&mute=1&controls=1&showinfo=0&rel=0&iv_load_policy=3`;
     };
 
-    // --- Lien "Aléatoire" ---
-    randomLink.addEventListener('click', (e) => {
+    if (featuredVideoIframe) { // Only play video if element exists (on index.html)
+        playRandomVideo();
+    }
+
+
+    // --- "Aléatoire" Link ---
+    randomLink.addEventListener('click', async (e) => {
         e.preventDefault();
         const rand = Math.random();
-        if (rand < 0.6) { // 3 chances sur 5 (0.6)
+        if (rand < 0.4) { // 2 chances sur 5 (0.4)
             window.open('https://nonexistante.fr', '_blank');
         } else {
+            // Ensure formationsData is loaded before trying to get a random formation
+            if (formationsData.length === 0) {
+                // If not already loaded, try to fetch it
+                try {
+                    const response = await fetch('https://raw.githubusercontent.com/RousselTM/grafana-formation/main/tp/data/projet3.json');
+                    formationsData = await response.json();
+                } catch (error) {
+                    console.error('Erreur lors du chargement des formations pour le lien aléatoire:', error);
+                    alert('Impossible de charger les formations pour le moment.');
+                    return;
+                }
+            }
+
             if (formationsData.length > 0) {
                 const randomIndex = Math.floor(Math.random() * formationsData.length);
                 const randomFormation = formationsData[randomIndex];
-                window.open(`https://elearning.rousseltm.fr/training_chapter?id=${randomFormation.id}`, '_blank');
+                window.open(`formation_details.php?id=${randomFormation.id}`, '_blank');
             } else {
                 alert('Aucune formation disponible pour le moment.');
             }
         }
     });
 
-    // Initialisation
-    loadFormations();
-    playRandomVideo();
 });

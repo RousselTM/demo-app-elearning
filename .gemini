@@ -1,5 +1,7 @@
 genere un site html 5 qui affiche les formations contenus dans ce json https://github.com/RousselTM/grafana-formation/blob/main/tp/data/projet3.json.
-Pour chaque formation, on affiche, nom, icone, catégorie et nombre de vues, un lien nommé 'voir la fortmation' qui pointe vers https://elearning.rousseltm.fr/training_chapter?id=ID en remplaçant ID par la valeur du champ id. Le nom et l'image doivent pointer vers le même lien.
+Pour chaque formation, on affiche, nom, icone, catégorie et nombre de vues, un lien nommé 'voir la formation' qui pointe vers la page formation_details.php qui affiche l'ensemble des champs de la formation contenu dans la partie du json correspondant (sans ajouter aucun champ supplémentaire) et à la fin un bouton qui pointe vers https://elearning.rousseltm.fr/training_chapter?id=ID en remplaçant ID par la valeur du champ id. 
+
+Le nom et l'image de la formation doivent pointer vers le même lien.
 
 Au dessus de cette section, afficher une section 'Vidéo à la une' et afficher aléatoirement et en lecture automatique une des vidéos youtube avec les ID suivants x7qLYzFIy_E", "iR1CWOG20YQ", "HR3HfYHOuHY","_xvbJdnFQpk","VfNfFQJ6kvQ"
 
@@ -9,7 +11,7 @@ L'auteur du site est "Equipe RousselTM"
 
 Le nom du site "Du concept à l'expertise"
 
-Quand le visiteur arrive sur la page d'accueil on lui affiche un modal/popup pour lui demander son nom et son email et en précisant que ces informations sont facultatives. Le nom sera affiché après le menu. Si on clique sur le nom il affiche le nom et l'email sous forme de popup. S'il ne rempli pas le formulaire ou il clique sur annuler on affiche comme nom anonyme et comme email NA
+Quand le visiteur clique sur le bouton Connexion, on lui affiche un modal/popup pour lui demander son nom et son email et en précisant que ces informations sont facultatives. Le nom sera affiché après le menu. Si on clique sur le nom il affiche le nom et l'email sous forme de popup. S'il ne rempli pas le formulaire ou il clique sur annuler on affiche comme nom anonyme et comme email NA
 
 ajouter le logo suivant https://elearning.rousseltm.fr/admin/images/logo.jpeg
 
@@ -17,8 +19,10 @@ Ajouter les liens suivants :
 - Toutes nos vidéos : https://www.youtube.com/@Duconceptalexpertise
 - A propos : https://elearning.rousseltm.fr 
 - Linkendin : https://www.linkedin.com/company/rousseltm/about/?viewAsMember=true
-- Aléatoire : quand on clique renvoi aléatoirement sur une des formations et 3 fois sur 5 renvoi vers https://nonexistante.fr
+- Aléatoire : quand on clique renvoi aléatoirement sur une des formations et 2 fois sur 5 renvoi vers https://nonexistante.fr
 - Déconnexion: quand on clique il positionne NA comme email et Anonyme comme nom d'utilisateur
 - Connexion: quand on clique il affiche le formulaire de saisie du nom et de l'email
 
 On affiche le bouton Connexion quand l'utilisateur est différent de Anonyme et Déconnexion dans le cas contraire
+
+Dans les pages PHP ne pas utiliser la fonction htmlspecialchars()

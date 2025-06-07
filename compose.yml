@@ -1,14 +1,20 @@
 services:
-  nginx:
-    image: nginx
+  nginx-demo-app-elearning:
+    image: lekpamartin/nginx-otel:1.25.2
     ports:
       - "1300:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+      - ./web:/usr/share/nginx/html:ro
+
+  php-demo-app-elearning:
+    image: lekpamartin/php-fpm-redis
+    volumes:
+      - ./web:/usr/share/nginx/html
     environment:
-      - name=value
       - DT_RELEASE_VERSION=$VERSION
       - DT_RELEASE_STAGE=$STAGE
       - DT_RELEASE_PRODUCT=$PRODUCT
       - DT_RELEASE_BUILD_VERSION=$BUILD_VERSION
-    volumes:
-      - ./nginx:/etc/nginx/conf.d:ro
-      - ./html:/var/www/html:ro
+    deploy:
+      replicas: 2
